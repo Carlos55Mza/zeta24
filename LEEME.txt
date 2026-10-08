@@ -59,3 +59,12 @@ por lectura y cada sección muestra hasta 12 titulares externos con alternancia 
 Las notas propias aparecen además en su bloque destacado.
 
 Radio Zeta continúa pendiente de la dirección real del streaming.
+
+LIMPIEZA DE PORTADA
+Los controles de Último Momento y estado de fuentes ahora están en Redacción,
+visibles tras iniciar sesión. Se quitaron los ejemplos y bloques de servicios
+sin información. Las secciones vacías se ocultan y la última noticia propia
+o una marcada destacada encabeza la portada. Se agregó contacto por WhatsApp.
+Para esta actualización solo reemplazar index.html, styles.css y app.js;
+no volver a ejecutar los SQL si las noticias automáticas ya están activadas.
+La conexión real de Radio Zeta sigue pendiente del reproductor de Caster.fm.
