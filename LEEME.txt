@@ -68,3 +68,12 @@ o una marcada destacada encabeza la portada. Se agregó contacto por WhatsApp.
 Para esta actualización solo reemplazar index.html, styles.css y app.js;
 no volver a ejecutar los SQL si las noticias automáticas ya están activadas.
 La conexión real de Radio Zeta sigue pendiente del reproductor de Caster.fm.
+
+RADIO ZETA — REPRODUCTOR INCORPORADO
+Se incorporó el widget oficial de Caster.fm Cloud con tu token público.
+Los botones del portal llevan al reproductor; pulsar Play allí inicia la escucha.
+No se declara que esté en vivo hasta que el reproductor confirme la emisión.
+Para escuchar, el canal debe tener una transmisión activa desde tu programa emisor.
+El token público no reemplaza las credenciales privadas del programa emisor.
+Solo reemplazar index.html, styles.css y app.js en GitHub.
+No se requiere modificar Supabase.
