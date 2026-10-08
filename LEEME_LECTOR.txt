@@ -1,0 +1,55 @@
+ZETA24 · EL LECTOR INFORMA
+
+ACTIVAR
+1. Extraé este ZIP en una carpeta nueva.
+2. Supabase > SQL Editor > New query: pegá todo supabase/06_lector_informa.sql
+   y pulsá Run. Crea la bandeja y el espacio privado de fotos.
+3. Subí a la raíz del repositorio GitHub estos siete archivos:
+   index.html, styles.css, app.js, weather.js, poll.js, agenda.js y reader.js.
+   Reemplazá los existentes; no hay que borrarlos antes.
+4. Esperá el despliegue verde y recargá con Ctrl + F5.
+No hace falta volver a ejecutar los otros SQL.
+
+LECTORES
+Menú El lector informa. Título, país, ciudad y relato son obligatorios.
+Nombre y contacto son opcionales. Se admite una foto JPG, PNG o WebP de hasta
+5 MB. Se requiere consentimiento para revisión y posible publicación.
+No se publica automáticamente. Si falla la foto después del envío del texto,
+se informa que el relato llegó sin el adjunto.
+Se admite hasta tres aportes por hora con el mismo identificador de navegador.
+Es un límite básico: borrar los datos o cambiar de dispositivo lo elude.
+No incluye verificación de identidad ni CAPTCHA.
+
+REVISAR
+REDACCIÓN > iniciar sesión > Aportes de los lectores > CARGAR APORTES.
+Filtrá pendientes, revisados o descartados. Se muestran hasta 100 por estado.
+VER FOTO PRIVADA genera un enlace temporal de cinco minutos para revisión.
+PREPARAR NOTA copia título/relato al formulario habitual de publicación;
+no copia el nombre, contacto ni imagen y no publica por sí mismo.
+Verificá fuentes y consentimiento, editá texto/sección y luego PUBLICAR ONLINE.
+GUARDAR ESTADO cambia el estado de revisión. No cambia la publicación de notas.
+La imagen original permanece privada; no se transfiere automáticamente al diario.
+Si querés usarla en una nota pública, habrá que adaptar el flujo de imágenes.
+
+PRIVACIDAD Y ARCHIVOS
+Solo las cuentas editoriales autorizadas leen aportes, contactos y fotos.
+No hagas público el bucket zeta-lectores. No compartas enlaces temporales con
+lectores. Para eliminar fotos antiguas, usá Supabase Storage y eliminá los
+objetos mediante su interfaz. Los aportes descartados se conservan hasta que
+los elimines desde la base de datos. No hay limpieza automática en esta versión.
+Si no hay sesión editorial, la bandeja no se carga; se vacía al cerrar sesión.
+Los tipos y tamaño se restringen en el servidor; la validación de cabecera de
+imagen se realiza en el navegador. El MIME por sí solo no certifica contenido.
+
+CONSERVADO
+Noticias, clima, radio, encuestas, Paraguay/Uruguay y agenda.
+Incluye además la función RSS corregida de Paraguay para evitar perderla en
+futuros despliegues. Si ya la actualizaste, no hay que desplegarla nuevamente.
+
+VALIDACIÓN
+Pruebas locales: consentimiento, envío, fallos, preparación de nota sin datos
+privados, validación de fotos y ausencia de publicación automática.
+ZIP verificado. El SQL y subida real a Storage requieren comprobación después
+ de instalar en tu proyecto. Revisá el diseño del formulario en PC y celular.
+Incluye una primera renovación estética general: tarjetas, encabezados,
+espacios, colores y formularios unificados. Falta la inspección visual en vivo.

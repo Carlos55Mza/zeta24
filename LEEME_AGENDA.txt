@@ -1,0 +1,52 @@
+ZETA24 · AGENDA DE LA COMUNIDAD
+
+INSTALACIÓN
+1. Extraé este ZIP en una carpeta nueva.
+2. En el proyecto Supabase existente > SQL Editor > New query,
+   pegá TODO el contenido de supabase/05_agenda.sql y pulsá Run.
+3. Subí a la raíz del repositorio GitHub zeta24 estos seis archivos:
+   index.html, styles.css, app.js, weather.js, poll.js y agenda.js.
+   Reemplazá los existentes; no hace falta borrarlos antes.
+4. Esperá el despliegue verde y recargá con Ctrl + F5.
+No hace falta volver a ejecutar otros SQL ni cambiar el actualizador RSS.
+
+PUBLICAR ACTIVIDADES
+REDACCIÓN > iniciar sesión > Administrar agenda.
+Completá título, país, categoría, ciudad, lugar, inicio y finalización.
+Las fechas y horas se ingresan en la hora local DEL PAÍS DEL EVENTO,
+no necesariamente la de tu computadora.
+Podés sumar descripción y enlace HTTPS del organizador.
+PUBLICAR EVENTO lo guarda online para todos los lectores.
+EDITAR carga un evento publicado y permite GUARDAR CAMBIOS.
+RETIRAR lo oculta del diario; su registro queda en la base de datos.
+LIMPIAR / NUEVO EVENTO vuelve al formulario de publicación.
+Los eventos terminados dejan de aparecer en la próxima actualización.
+La agenda se refresca cada cinco minutos o al pulsar ACTUALIZAR.
+
+LECTORES
+Filtros por país y por categoría. Cada tarjeta muestra hora local, ciudad,
+lugar y, si existe, el enlace al organizador. Incluye Argentina, Paraguay
+ y Uruguay. Las categorías son Cultura, Deportes, Comunidad, Ferias y Música.
+No incluye actividades inventadas ni trae eventos automáticamente.
+Se muestran hasta 200 próximas actividades activas, ordenadas por inicio.
+Para actividades de varios días, ingresá las fechas reales de inicio y fin.
+Para horarios separados, publicá un evento por encuentro.
+La hora argentina corresponde a Buenos Aires/Mendoza; las otras zonas son
+America/Asuncion y America/Montevideo.
+
+PERMISOS
+Pueden administrar las cuentas de correo confirmadas que ya existen al
+instalar. Se reutiliza la lista autorizada de las encuestas.
+Las cuentas nuevas no reciben permisos automáticamente.
+Las publicaciones permanecen en la misma base de datos al actualizar el sitio.
+
+CONSERVADO
+Centro Meteorológico, Radio Zeta, Meteored, encuestas, noticias y las nuevas
+secciones de Paraguay y Uruguay.
+
+VERIFICACIÓN
+Se comprobó JavaScript, horarios locales de los tres países en distintas
+estaciones, filtros, estados vacíos y enlaces HTTPS mediante pruebas locales.
+Se verificó el contenido del ZIP y la presencia de las funciones anteriores.
+El SQL no fue ejecutado en tu proyecto desde este entorno. Falta comprobar
+visualmente el diario publicado y crear/editar/retirar un evento real.

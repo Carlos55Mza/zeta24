@@ -1,0 +1,47 @@
+ZETA24 · PARAGUAY Y URUGUAY
+
+1. Extraé este ZIP en una carpeta nueva.
+2. En GitHub, subí a la raíz de zeta24: index.html, styles.css, app.js,
+   weather.js y poll.js. Reemplazá los existentes; no hay que borrarlos antes.
+3. En tu proyecto Supabase > SQL Editor > New query, pegá todo el contenido de
+   supabase/04_paraguay_uruguay.sql y pulsá Run.
+4. Esperá el despliegue verde y recargá con Ctrl + F5.
+5. Las noticias llegarán en la siguiente ejecución del actualizador RSS
+   que ya tenés programado (normalmente cada 15 minutos).
+No hace falta volver a ejecutar otros SQL ni modificar la función de noticias.
+
+SECCIONES NUEVAS
+Menú: Paraguay y Uruguay. Cada país tiene noticias, accesos al clima e informes
+propios de Estación Zúñiga. Los titulares externos llevan al medio original.
+Fuentes: ABC Color (nacionales) y Montevideo Portal (actualidad).
+Mientras se activan, las secciones muestran un mensaje y un enlace al medio;
+no se usan noticias de demostración ni titulares inventados.
+
+CLIMA
+Paraguay: Asunción, Ciudad del Este, Encarnación.
+Uruguay: Montevideo, Salto, Punta del Este.
+Cada botón abre el pronóstico de siete días en el Centro Meteorológico.
+El buscador permite consultar otras localidades. Meteored sigue en San Martín.
+Se usa la hora local de cada ciudad devuelta por Open-Meteo.
+Paraguay: enlace al portal oficial DMH/DINAC, meteorologia.gov.py.
+Uruguay: enlace a advertencias INUMET, inumet.gub.uy/alerta.
+Los enlaces oficiales no implican que haya una alerta vigente. Hay que revisar
+el área y la vigencia en la fuente oficial. Los pronósticos automáticos son de
+modelos, no mediciones de los instrumentos de Estación Zúñiga.
+
+PUBLICAR TUS NOTAS
+REDACCIÓN > iniciar sesión > elegir sección:
+PARAGUAY o URUGUAY: noticias propias del país.
+CLIMA PARAGUAY o CLIMA URUGUAY: informes meteorológicos de Carlos.
+Los informes aparecen tanto en su país como en el Centro Meteorológico.
+
+CONSERVADO
+Radio Zeta, Meteored, Centro Meteorológico, noticias, encuestas y su panel.
+Las encuestas existentes y sus votos siguen usando las mismas tablas.
+
+VALIDACIÓN
+Se comprobó la sintaxis de JavaScript, las categorías y enlaces, el contenido
+real de los canales RSS y el ZIP completo. Se probaron con datos simulados la
+separación de noticias e informes por país y los seis accesos de clima.
+No se ejecutó el SQL en tu cuenta ni se pudo hacer comprobación visual de
+navegador en este entorno. Probá noticias, clima y una nota propia al publicar.

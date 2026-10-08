@@ -77,3 +77,21 @@ Para escuchar, el canal debe tener una transmisión activa desde tu programa emi
 El token público no reemplaza las credenciales privadas del programa emisor.
 Solo reemplazar index.html, styles.css y app.js en GitHub.
 No se requiere modificar Supabase.
+
+AJUSTE DEL CANAL DE RADIO
+Se incorporó el ID del canal suministrado por el código de tu panel de Caster.fm.
+Se mantiene streamPlayer para la emisión en vivo, no podcastsPlayer (grabaciones).
+Este ajuste requiere comprobar en el navegador si resuelve el 404 del proveedor.
+En esta entrega solo cambió index.html. No tocar Mixxx ni Supabase.
+
+PRUEBA CON WIDGET COPIADO DEL PANEL
+Se reemplazó el widget por el código podcastsPlayer proporcionado por Carlos,
+con su tema, color, ID de canal y dirección de script originales.
+Solo cambió index.html. Falta comprobar carga y reproducción en GitHub Pages.
+
+ESTILO COMPACTO DE RADIO
+Se mantiene podcastsPlayer que Carlos comprobó funcionando.
+Tema oscuro y acento rojo mediante parámetros oficiales del widget.
+Contenedor de 400px máximo en escritorio, adaptable al móvil.
+No se recortan controles ni se fuerza la altura del iframe.
+Reemplazar index.html y styles.css en GitHub. app.js no cambió.

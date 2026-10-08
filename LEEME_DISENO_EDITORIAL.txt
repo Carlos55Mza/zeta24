@@ -1,0 +1,39 @@
+ZETA24 · DISEÑO EDITORIAL
+
+ACTUALIZAR
+Extraé este ZIP en una carpeta NUEVA y subí a la raíz de GitHub zeta24:
+index.html, styles.css, editorial.css, app.js, weather.js, poll.js,
+agenda.js y reader.js. Reemplazá los existentes.
+editorial.css es un archivo NUEVO y debe quedar junto a styles.css.
+Esperá el despliegue verde y recargá con Ctrl + F5.
+No hace falta ejecutar SQL ni cambiar la función de noticias para el diseño.
+
+CAMBIOS VISUALES
+Fondo cálido con matices suaves. Portada en bordó. Secciones con recuadros
+ y acentos de color. Titulares grandes de apertura, tipografía serif en notas
+secundarias y tipografía sans en formularios y datos. La primera noticia de
+cada sección tiene mayor jerarquía visual, sin asignarle una importancia
+editorial que no hayas decidido: conserva el orden del listado existente.
+En PC se usan composiciones de tres columnas con una apertura más ancha;
+en celular las tarjetas pasan a una columna. Clima tiene identidad verde;
+Paraguay y Uruguay tienen encabezados diferenciados.
+Fuentes Google: Barlow Condensed, Libre Baskerville y DM Sans. Si no cargan,
+se usan fuentes alternativas del sistema y el diario sigue funcionando.
+
+NOTICIAS DE PARAGUAY
+Se comprobó que ABC Color ya actualizó correctamente el 8/10 a las 16:45
+ y sus titulares están en la base de datos. Recargá el diario para verlos.
+Esta versión consulta titulares cada minuto mientras la pestaña está visible;
+no cambia la frecuencia de recopilación de las fuentes (15 minutos).
+También vuelve a consultar al regresar a la pestaña.
+
+CONSERVADO
+Radio, noticias, Meteored, Centro Meteorológico, encuestas, agenda,
+Paraguay/Uruguay, El lector informa y su bandeja privada.
+La función RSS incluida conserva la corrección de ABC Color.
+
+VERIFICACIÓN
+Sintaxis JavaScript, referencias de archivos locales y contenido del ZIP.
+Se verificó la presencia de todas las funciones anteriores.
+No se pudo ejecutar un navegador local en este entorno. Revisá el resultado
+publicado en PC y celular para afinar tamaño y distribución con capturas reales.

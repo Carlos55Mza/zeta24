@@ -1,0 +1,48 @@
+ZETA24 · ENCUESTA DEL DÍA
+
+ACTIVACIÓN (UNA SOLA VEZ)
+1. Abrí tu proyecto existente de Supabase.
+2. SQL Editor > New query.
+3. Abrí supabase/03_encuestas.sql con Bloc de notas, copiá TODO su contenido,
+   pegalo en SQL Editor y pulsá Run.
+4. Subí a la raíz del repositorio zeta24 estos cinco archivos del ZIP:
+   index.html, styles.css, app.js, weather.js y poll.js.
+   Reemplazá los existentes; no hace falta borrarlos antes.
+5. Esperá el despliegue verde de GitHub Pages y recargá con Ctrl + F5.
+
+El ZIP conserva el Centro Meteorológico, Meteored, la radio y noticias.
+No es necesario volver a ejecutar 01_tablas.sql ni 02_programar.sql.
+No publiques claves privadas ni contraseñas en GitHub.
+
+PRIMERA ENCUESTA
+Se activa una pregunta de bienvenida: ¿Qué contenido te gustaría ver más en
+ZETA24? Tiene cuatro opciones y dura 24 horas desde la instalación.
+Comienza con cero votos reales. Reejecutar el SQL no vuelve a crearla.
+
+ADMINISTRAR
+REDACCIÓN > iniciar sesión > Administrar Encuesta del día.
+Pregunta: 5 a 200 caracteres. Opciones: 2 a 5, una por renglón,
+hasta 100 caracteres cada una, distintas entre sí.
+Duración: 24 horas, 48 horas o 7 días.
+PUBLICAR ENCUESTA cierra la anterior y crea una nueva con cero votos.
+CERRAR ENCUESTA ACTUAL termina la votación y conserva los resultados.
+Se autorizan las cuentas de correo confirmadas existentes al instalar el SQL.
+Si tu cuenta no puede administrar, verificá que esté confirmada en Supabase.
+Las cuentas creadas después no reciben permisos automáticamente.
+
+LECTORES
+Votan sin iniciar sesión. El servidor evita un segundo voto con el mismo
+identificador de navegador. El identificador aleatorio se guarda localmente;
+no se piden nombre, correo ni ubicación. Borrar los datos, usar modo privado
+o cambiar de dispositivo permite votar nuevamente. No es una encuesta
+representativa ni un mecanismo de voto verificado por persona.
+Los resultados se actualizan al votar y cada minuto con la pestaña visible.
+No se exponen los identificadores individuales en las consultas públicas.
+
+VERIFICACIÓN
+Se comprobó la sintaxis de JavaScript y, con respuestas simuladas, la carga,
+el voto, los resultados, el bloqueo local de repetición y validación del editor.
+Se verificó dentro del ZIP que estén la encuesta y el Centro Meteorológico.
+El SQL no se ejecutó contra tu proyecto desde este entorno. Una vez instalado,
+probá un voto y una publicación desde Redacción. La comprobación visual final
+se realiza en el diario publicado.
