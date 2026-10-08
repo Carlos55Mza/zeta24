@@ -10,3 +10,14 @@
 [hidden]{display:none!important}.featured-news{margin:0 0 28px}.featured-article{border-left:6px solid #c71926;padding:24px;background:#f6f6f6;display:grid;gap:24px}.featured-article h2{font-size:clamp(24px,4vw,38px);line-height:1.15;margin:12px 0}.featured-article p{line-height:1.6}.featured-article img{width:100%;max-height:380px;object-fit:cover}#editorOnline .live-tools{display:block}#editorOnline .urgent-panel,#editorOnline .source-panel{margin:18px 0}footer a{color:inherit}.grid>div[hidden]+aside{max-width:700px}.grid:has(>div[hidden]){display:block}
 
 .radio-connected{display:block}.radio-player{margin-top:24px;width:100%;min-height:140px}.radio-help{font-size:13px;opacity:.8;margin-top:14px}.radio-player .cstrEmbed{max-width:100%}
+
+/* Radio compacta: conserva íntegros los controles del widget externo. */
+.radio-connected{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,400px);gap:24px;padding:20px 24px;border-radius:12px;border:1px solid #303030;border-left:4px solid var(--accent);box-shadow:0 6px 18px #0000000d;align-items:center}
+.radio-connected .eyebrow{margin-top:0;color:#f16c7a;font-size:10px;letter-spacing:1.8px}
+.radio-connected h2{font-size:26px;letter-spacing:-.5px;margin:7px 0}
+.radio-connected .radio-brand p{font-size:13px;margin:0;color:#bfc0c4}
+.radio-connected .radio-player{margin:0;min-height:0;min-width:0;max-width:400px;width:100%}
+.radio-connected .cstrEmbed{width:100%;max-width:400px}
+.radio-connected .cstrEmbed iframe{width:100%!important;max-width:100%;border:0;border-radius:8px;display:block}
+.radio-connected .radio-help{font-size:11px;margin:7px 0 0;color:#a6a6ad;text-align:right}
+@media(max-width:650px){.radio-connected{grid-template-columns:1fr;gap:14px;padding:18px}.radio-connected .radio-player{max-width:100%}.radio-connected h2{font-size:24px}.radio-connected .radio-help{text-align:left}}
