@@ -1,0 +1,61 @@
+ZETA24 — NOTICIAS AUTOMÁTICAS POR SECCIONES
+
+Esta actualización conserva tu proyecto, tu panel Supabase y el widget Meteored.
+Las noticias automáticas NO están activadas todavía: requieren instalar la función y el cron en tu cuenta.
+
+1. SITIO
+Reemplazá index.html, styles.css y app.js en el alojamiento actual.
+No subas la carpeta supabase ni este instructivo como parte del sitio público.
+Tus publicaciones siguen en la tabla noticias existente.
+
+2. TABLAS
+En tu proyecto Supabase, abrí SQL Editor y ejecutá supabase/01_tablas.sql.
+Se crean tablas separadas con lectura pública y escritura reservada al servidor.
+
+3. FUNCIÓN
+En Edge Functions, creá una función llamada actualizar-noticias.
+Pegá el contenido de supabase/functions/actualizar-noticias/index.ts y desplegala.
+Desactivá la verificación JWT de esta función: usa su propio secreto privado.
+En Secrets, creá RSS_CRON_SECRET con una clave aleatoria larga (32 caracteres o más).
+No compartas ese secreto ni lo pongas en app.js. SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY
+son variables del servidor que Supabase proporciona a sus funciones; nunca van en el navegador.
+Alternativa con CLI desde esta carpeta:
+ supabase functions deploy actualizar-noticias --project-ref lzgxiacmudzntxdfrvkc --no-verify-jwt
+Configurá el secreto desde el panel, evitando ponerlo en comandos o archivos públicos.
+
+4. ACTUALIZACIÓN CADA 15 MINUTOS
+Abrí supabase/02_programar.sql y reemplazá todas las apariciones de
+CAMBIAR_POR_UN_SECRETO_LARGO por el MISMO valor de RSS_CRON_SECRET.
+Ejecutalo en SQL Editor. Programa la lectura e inicia la primera carga.
+No subas ni compartas este SQL después de completarlo con el secreto.
+La tarea corre en Supabase aunque tu computadora esté apagada.
+
+5. COMPROBAR
+Revisá los registros de la función y la tabla fuentes_rss:
+ ultima_ok: último acceso correcto; ultimo_error: problema de esa fuente.
+Recargá el sitio: deben aparecer titulares con fuente y enlace.
+Para comprobar el cron, revisá Cron en el panel y esperá la siguiente ejecución.
+No alcanza con subir el ZIP para que el cron funcione.
+
+FUENTES Y CONTENIDOS
+Se configuran Diario UNO, Clarín, BBC Mundo y France 24 mediante RSS.
+Prueba realizada desde este entorno: BBC Mundo respondió con 34 entradas RSS.
+Diario UNO, Clarín y France 24 devolvieron HTTP 403. Se conservan como canales
+configurados para probar desde Supabase, pero NO se consideran verificados.
+Los canales temáticos tampoco pudieron comprobarse aquí. Si mantienen el bloqueo,
+habrá que desactivarlos o sustituirlos por fuentes que permitan el acceso.
+Las fuentes pueden bloquear accesos o cambiar sus direcciones. Desactivá un canal
+poniendo activa=false en fuentes_rss; agregá canales nuevos desde esa misma tabla.
+La variedad se alterna entre los medios disponibles en cada sección.
+Mendoza usa el canal general de Diario UNO: puede incluir notas de alcance nacional.
+Zona Este queda reservada a tus notas, sin atribuir automáticamente como locales
+noticias que solo mencionan San Martín. Ambiente también espera notas propias
+o un canal específico que incorporemos después.
+Se muestran titulares y enlaces, sin copiar artículos completos ni fotos.
+Los títulos idénticos se ocultan en la misma sección y las URL se deduplican;
+no se garantiza detectar el mismo acontecimiento con títulos diferentes.
+Se muestran noticias de los últimos siete días. Cada fuente importa hasta 40 entradas
+por lectura y cada sección muestra hasta 12 titulares externos con alternancia de medios.
+Las notas propias aparecen además en su bloque destacado.
+
+Radio Zeta continúa pendiente de la dirección real del streaming.
