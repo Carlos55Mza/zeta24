@@ -1,0 +1,54 @@
+ZETA24 · ESPACIOS PUBLICITARIOS
+
+ACTIVAR
+1. Extraé este ZIP en una carpeta nueva.
+2. Supabase > SQL Editor > New query: pegá TODO supabase/07_publicidad.sql
+   y pulsá Run. Crea la tabla de anuncios y el espacio de imágenes públicas.
+3. Subí a la raíz de GitHub estos nueve archivos:
+   index.html, styles.css, editorial.css, app.js, weather.js, poll.js,
+   agenda.js, reader.js y ads.js.
+4. Esperá el despliegue verde y recargá con Ctrl + F5.
+No hace falta ejecutar de nuevo los SQL anteriores.
+
+UBICACIONES
+Portada principal: debajo de la presentación.
+Entre secciones: antes del bloque regional.
+Paraguay y Uruguay: dentro de la sección de cada país.
+Todos llevan PUBLICIDAD. Cuando no hay aviso vigente, se muestra una
+invitación comercial con acceso a WhatsApp +54 9 263 4277869.
+
+CARGAR Y ADMINISTRAR
+REDACCIÓN > iniciar sesión > Administrar publicidad.
+Ingresá anunciante, texto opcional, ubicación, enlace HTTPS e inicio/fin.
+Podés usar WhatsApp: https://wa.me/5492634277869
+Las fechas se ingresan en hora de Argentina, en todos los espacios.
+Opcional: subí una imagen JPG, PNG o WebP de hasta 5 MB, o pegá su enlace HTTPS.
+Si elegís un archivo, reemplaza el enlace de imagen escrito en el formulario.
+Las imágenes de publicidad son públicas; no subas documentos o fotos privadas.
+GUARDAR ANUNCIO lo publica o programa según las fechas.
+CARGAR ANUNCIOS permite EDITAR, PAUSAR o HABILITAR.
+Se muestran hasta 100 anuncios en el panel. Entre varios vigentes de una misma
+ubicación se muestra el creado más recientemente. No hay rotación automática.
+El lector consulta los avisos vigentes cada minuto con la pestaña visible.
+Al llegar la fecha de fin el aviso deja de mostrarse en la siguiente consulta.
+Para tamaños, recomendamos portada horizontal (por ejemplo 1200 x 300) y
+avisos de países horizontales o cuadrados. Las imágenes se ajustan sin recorte;
+en celular puede reducirse el tamaño del texto que ya venga dentro de la imagen.
+
+ARCHIVOS Y PERMISOS
+Solo las cuentas editoriales autorizadas pueden guardar/pausar/subir imágenes.
+El aviso puede tener texto sin imagen. La etiqueta PUBLICIDAD siempre aparece.
+Pausar/finalizar un anuncio no elimina la imagen de su URL pública.
+Las imágenes antiguas o subidas sin guardar el anuncio se pueden eliminar desde
+Supabase Storage > zeta-publicidad. Revisá que ningún aviso las esté usando.
+No incluye pagos, contratos, estadísticas de clics ni cobros automáticos.
+
+CONSERVADO
+Diseño editorial, análisis de la estación, clima, radio, noticias, encuestas,
+Paraguay/Uruguay, agenda, aportes de lectores y corrección RSS de ABC Color.
+
+VALIDACIÓN
+Sintaxis JavaScript, estados vigente/programado/pausado/vencido, enlaces HTTPS,
+WhatsApp y etiqueta PUBLICIDAD probados localmente con datos simulados.
+ZIP y referencias de archivos verificados. Falta ejecutar SQL en tu proyecto,
+probar un anuncio real y comprobarlo visualmente en PC y celular.
