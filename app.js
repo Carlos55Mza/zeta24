@@ -112,14 +112,13 @@ function keepNetflixNews(post){
  let url='';try{url=normalize(decodeURIComponent(post.url||''))}catch{url=normalize(post.url)}
  return /\bargentina\b/.test(title)||/(?:^|[\/_.-])argentina(?:$|[\/_.?&-])/.test(url);
 }
-function keepEuroNews(post){
+function keepCurrencyNews(post){
  const title=normalizedNewsText(post.titulo);
- // Las cotizaciones argentinas suelen titularse simplemente «Euro hoy».
- const location=title.match(/\bEURO\s+HOY\s+EN\s+([^:?!]+)/);
+ const location=title.match(/\b(?:EURO|DOLAR)\s+HOY\s+EN\s+([^:?!]+)/);
  if(location)return /^ARGENTINA\b/.test(location[1].trim());
  return true;
 }
-async function loadExternal(){try{const [news,status]=await Promise.all([sb.from('noticias_externas').select('*').gte('published_at',new Date(Date.now()-7*86400000).toISOString()).order('published_at',{ascending:false}).limit(800),sb.from('fuentes_rss').select('nombre,ultima_ok,ultimo_error').eq('activa',true)]);if(news.error||status.error)throw news.error||status.error;externalNews=(news.data||[]).filter(keepNetflixNews).filter(keepEuroNews);const times=(status.data||[]).map(x=>x.ultima_ok).filter(Boolean).sort();const latest=times.at(-1);const failed=(status.data||[]).filter(x=>x.ultimo_error).length;$('#autoStatus').textContent=latest?`Última lectura de fuentes: ${fmt(latest)}. ${failed?failed+' fuentes no respondieron; se conservan sus titulares anteriores.':'Actualización programada cada 15 minutos.'}`:'Noticias automáticas pendientes de la primera actualización.';$('#autoBadge').textContent=latest?(Date.now()-new Date(latest)>45*60000?'DEMORADA':'ACTUALIZADAS'):'PENDIENTE';if(latest&&Date.now()-new Date(latest)>45*60000)$('#autoStatus').textContent+=' La actualización está demorada.'}catch{ $('#autoStatus').textContent='Noticias automáticas pendientes de activación o temporalmente sin conexión.';$('#autoBadge').textContent='PENDIENTE'}renderSections()}
+async function loadExternal(){try{const [news,status]=await Promise.all([sb.from('noticias_externas').select('*').gte('published_at',new Date(Date.now()-7*86400000).toISOString()).order('published_at',{ascending:false}).limit(800),sb.from('fuentes_rss').select('nombre,ultima_ok,ultimo_error').eq('activa',true)]);if(news.error||status.error)throw news.error||status.error;externalNews=(news.data||[]).filter(keepNetflixNews).filter(keepCurrencyNews);const times=(status.data||[]).map(x=>x.ultima_ok).filter(Boolean).sort();const latest=times.at(-1);const failed=(status.data||[]).filter(x=>x.ultimo_error).length;$('#autoStatus').textContent=latest?`Última lectura de fuentes: ${fmt(latest)}. ${failed?failed+' fuentes no respondieron; se conservan sus titulares anteriores.':'Actualización programada cada 15 minutos.'}`:'Noticias automáticas pendientes de la primera actualización.';$('#autoBadge').textContent=latest?(Date.now()-new Date(latest)>45*60000?'DEMORADA':'ACTUALIZADAS'):'PENDIENTE';if(latest&&Date.now()-new Date(latest)>45*60000)$('#autoStatus').textContent+=' La actualización está demorada.'}catch{ $('#autoStatus').textContent='Noticias automáticas pendientes de activación o temporalmente sin conexión.';$('#autoBadge').textContent='PENDIENTE'}renderSections()}
 setInterval(()=>{if(!document.hidden)loadExternal();},60*1000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();loadExternal();}});
 
