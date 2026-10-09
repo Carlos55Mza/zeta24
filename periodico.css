@@ -71,3 +71,8 @@ main{background:var(--paper);padding-bottom:30px}
 #newNewsBtn{background:#454641}
 #editNewsStatus{font-size:12px;line-height:1.5;margin:10px 0 0}
 .news-edit-picker button:disabled{opacity:.55;cursor:wait}
+
+/* Transición breve al cambiar publicidad */
+.ad-campaign{animation:zetaAdAppear .35s ease-out}
+@keyframes zetaAdAppear{from{opacity:.25}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.ad-campaign{animation:none}}
