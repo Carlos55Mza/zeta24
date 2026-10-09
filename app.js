@@ -1,7 +1,7 @@
 const SUPABASE_URL='https://lzgxiacmudzntxdfrvkc.supabase.co';
 const SUPABASE_KEY='sb_publishable_SgTDV6_RvDZPwZomhpy5aA_JkZWlJsL';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let externalNews=[]; let cache=[]; const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let editingNewsId=null; let externalNews=[]; let cache=[]; const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 function esc(s=''){return String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
 function fmt(x){return new Date(x).toLocaleString('es-AR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
@@ -15,11 +15,65 @@ function openArticle(id){const p=cache.find(x=>String(x.id)===String(id));if(!p)
 $('#closeArticle').onclick=()=>{$('#articleModal').classList.remove('open');history.replaceState(null,'',location.pathname)};
 $('#shareBtn').onclick=async()=>{try{if(navigator.share)await navigator.share({title:$('#articleTitle').textContent,url:location.href});else{await navigator.clipboard.writeText(location.href);toast('Enlace copiado')}}catch{}};
 $('#search').addEventListener('input',filterNews);
-async function authUI(){const {data:{session}}=await sb.auth.getSession();$('#authBox').style.display=session?'none':'block';$('#editorOnline').style.display=session?'block':'none';if(session)$('#userEmail').textContent=session.user.email}
+async function authUI(){const {data:{session}}=await sb.auth.getSession();$('#authBox').style.display=session?'none':'block';$('#editorOnline').style.display=session?'block':'none';if(session){$('#userEmail').textContent=session.user.email;refreshEditNewsList()}else resetNewsEditor()}
 $('#editorBtn').onclick=async()=>{$('#editorModal').classList.add('open');await authUI()};$('#closeEditor').onclick=()=>$('#editorModal').classList.remove('open');
 $('#loginForm').onsubmit=async e=>{e.preventDefault();const fd=new FormData(e.target);const {error}=await sb.auth.signInWithPassword({email:fd.get('email'),password:fd.get('password')});if(error)return toast('No se pudo iniciar sesión: '+error.message);e.target.reset();await authUI();toast('Redacción conectada')};
 $('#logoutBtn').onclick=async()=>{await sb.auth.signOut();await authUI();toast('Sesión cerrada')};
-$('#postForm').onsubmit=async e=>{e.preventDefault();const form=e.target,button=form.querySelector('button[type="submit"]'),fd=new FormData(form);let image=fd.get('newsImage').trim(),photo=fd.get('newsPhoto');if(image&&!safeURL(image))return toast('La imagen debe tener un enlace HTTPS válido');if(photo?.size&&(!['image/jpeg','image/png','image/webp'].includes(photo.type)||photo.size>5242880))return toast('Elegí una foto JPG, PNG o WebP de hasta 5 MB');button.disabled=true;try{if(photo?.size){const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[photo.type],path=crypto.randomUUID()+'.'+ext,bucket=sb.storage.from('zeta-noticias');const {error}=await bucket.upload(path,photo,{contentType:photo.type,upsert:false});if(error)throw error;image=bucket.getPublicUrl(path).data.publicUrl;form.elements.namedItem('newsImage').value=image;form.elements.namedItem('newsPhoto').value='';}const row={titulo:fd.get('title').trim(),copete:fd.get('summary').trim(),seccion:fd.get('section'),autor:fd.get('author').trim()||'Redacción ZETA 24',contenido:fd.get('body').trim(),publicada:true,destacada:false,imagen_url:image||null,imagen_credito:fd.get('newsCredit').trim()||null};const {error}=await sb.from('noticias').insert(row);if(error)throw error;form.reset();$('#editorModal').classList.remove('open');await load();toast('¡Noticia publicada online!');}catch(error){toast('No se pudo publicar: '+error.message);}finally{button.disabled=false;}};
+function refreshEditNewsList(){
+ const select=$('#editNewsSelect');select.replaceChildren(new Option('Elegí una noticia…',''));
+ cache.filter(p=>!p.demo).forEach(p=>select.add(new Option(p.titulo+' · '+p.seccion,String(p.id))));
+ if(editingNewsId!==null)select.value=String(editingNewsId);
+}
+function resetNewsEditor(){
+ editingNewsId=null;$('#postForm').reset();$('#postForm').querySelector('button[type="submit"]').textContent='PUBLICAR ONLINE';
+ $('#editNewsStatus').textContent='Elegí una nota para corregirla o completá el formulario para publicar una nueva.';
+ $('#editNewsSelect').value='';
+}
+$('#newNewsBtn').onclick=resetNewsEditor;
+$('#editNewsBtn').onclick=async()=>{
+ const id=$('#editNewsSelect').value;if(!id)return toast('Elegí primero la noticia que querés editar');
+ const button=$('#editNewsBtn');button.disabled=true;
+ try{
+  const {data:{session}}=await sb.auth.getSession();if(!session)throw new Error('Iniciá sesión en Redacción');
+  const {data:p,error}=await sb.from('noticias').select('*').eq('id',id).single();if(error)throw error;
+  const form=$('#postForm');form.reset();
+  const values={title:p.titulo,summary:p.copete,section:p.seccion,author:p.autor,body:p.contenido,newsImage:p.imagen_url,newsCredit:p.imagen_credito};
+  for(const [name,value] of Object.entries(values)){
+   const field=form.elements.namedItem(name);
+   if(name==='section'&&value&&![...field.options].some(o=>o.value===value))field.add(new Option(value,value));
+   field.value=value||'';
+  }
+  editingNewsId=p.id;form.querySelector('button[type="submit"]').textContent='GUARDAR CAMBIOS';
+  $('#editNewsStatus').textContent='Editando: '+p.titulo+'. La foto actual se conserva; podés cambiarla o borrar su enlace para quitarla.';
+  form.elements.namedItem('title').focus();
+ }catch(error){toast('No se pudo abrir la noticia: '+error.message)}finally{button.disabled=false}
+};
+$('#postForm').onsubmit=async e=>{
+ e.preventDefault();const form=e.target,button=form.querySelector('button[type="submit"]'),fd=new FormData(form),editId=editingNewsId;
+ let image=String(fd.get('newsImage')||'').trim(),photo=fd.get('newsPhoto');
+ if(image&&!safeURL(image))return toast('La imagen debe tener un enlace HTTPS válido');
+ if(photo?.size&&(!['image/jpeg','image/png','image/webp'].includes(photo.type)||photo.size>5242880))return toast('Elegí una foto JPG, PNG o WebP de hasta 5 MB');
+ button.disabled=true;$('#editNewsBtn').disabled=true;$('#newNewsBtn').disabled=true;
+ try{
+  const {data:{session}}=await sb.auth.getSession();if(!session)throw new Error('Iniciá sesión en Redacción');
+  if(photo?.size){
+   const ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[photo.type],path=crypto.randomUUID()+'.'+ext,bucket=sb.storage.from('zeta-noticias');
+   const {error}=await bucket.upload(path,photo,{contentType:photo.type,upsert:false});if(error)throw error;
+   image=bucket.getPublicUrl(path).data.publicUrl;form.elements.namedItem('newsImage').value=image;form.elements.namedItem('newsPhoto').value='';
+  }
+  const row={titulo:fd.get('title').trim(),copete:fd.get('summary').trim(),seccion:fd.get('section'),autor:fd.get('author').trim()||'Redacción ZETA 24',contenido:fd.get('body').trim(),imagen_url:image||null,imagen_credito:fd.get('newsCredit').trim()||null};
+  if(editId!==null){
+   const {data,error}=await sb.from('noticias').update(row).eq('id',editId).select('id');if(error)throw error;
+   if(!data?.length)throw new Error('No se guardaron los cambios. Revisá los permisos de edición de noticias en Supabase.');
+  }else{
+   const {error}=await sb.from('noticias').insert({...row,publicada:true,destacada:false});if(error)throw error;
+  }
+  resetNewsEditor();$('#editorModal').classList.remove('open');await load();refreshEditNewsList();
+  if(editId!==null&&location.hash==='#nota='+editId)openArticle(editId);
+  toast(editId!==null?'¡Cambios guardados!':'¡Noticia publicada online!');
+ }catch(error){toast('No se pudo guardar: '+error.message)}finally{button.disabled=false;$('#editNewsBtn').disabled=false;$('#newNewsBtn').disabled=false}
+};
+
 async function loadUrgent(){const {data}=await sb.from('ultimo_momento').select('*').eq('activo',true).order('created_at',{ascending:false}).limit(1);if(data?.[0])$('#ticker').textContent=data[0].texto}
 $('#urgentBtn').onclick=async()=>{const v=$('#urgentInput').value.trim();if(!v)return toast('Escribí primero el titular urgente');const {data:{session}}=await sb.auth.getSession();if(!session){$('#editorModal').classList.add('open');await authUI();return toast('Iniciá sesión en Redacción para actualizar Último Momento')}const {error}=await sb.from('ultimo_momento').insert({texto:v,activo:true});if(error)return toast('No se pudo actualizar: '+error.message);$('#ticker').textContent=v;$('#urgentInput').value='';toast('Último Momento publicado online')};
 function showRadio(){const el=$('#radio');el.scrollIntoView({behavior:'smooth',block:'center'});history.replaceState(null,'','#radio')}$('#radioBtn').onclick=showRadio;$('#radioMini').onclick=showRadio;
