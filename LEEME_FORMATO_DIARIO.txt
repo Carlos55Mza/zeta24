@@ -1,12 +1,14 @@
-ZETA24 — FORMATO DE PERIÓDICO
+ZETA24 — FONDO, ESPACIOS Y RELOJ
 
-Subí estos tres archivos a la raíz del repositorio zeta24:
+Subí a la raíz del repositorio zeta24:
 1. index.html (reemplazar)
-2. app.js (reemplazar)
-3. periodico.css (archivo nuevo)
+2. periodico.css (reemplazar)
+3. reloj.js (nuevo)
 
-Mantené styles.css, editorial.css y los demás archivos existentes.
-No hay que ejecutar SQL ni cambiar la función de Supabase.
-Esperá que GitHub Pages termine de publicar y recargá con Ctrl + F5.
+Conservá cabecera-zeta24.webp y todos los demás archivos publicados.
+La imagen de cabecera se incluye por comodidad. app.js sigue sin cambios y no hace falta reemplazarlo.
+No hace falta modificar Supabase.
+Cuando GitHub Pages termine de publicar, recargá con Ctrl + F5.
 
-La cabecera, las columnas, los titulares y las separaciones ahora siguen un formato de periódico. Cada sección elige una sola nota con foto para abrirla; las notas sin foto quedan compactas. Las fotos provienen de las noticias existentes. Se conservan todas las funciones y el orden Mendoza, Argentina, Paraguay, Uruguay.
+Reloj: hora de Argentina, actualizado cada segundo.
+Fondo: gris cálido suave, separaciones más compactas y espacios publicitarios vacíos ocultos.
