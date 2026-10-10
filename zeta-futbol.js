@@ -4,24 +4,38 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const proxy=String(window.ZETA_FUTBOL_PROXY_URL||'').trim(),zone='America/Argentina/Buenos_Aires';
 const fmtDay=d=>new Intl.DateTimeFormat('es-AR',{timeZone:zone,weekday:'long',day:'numeric',month:'long'}).format(d);
 const fmtHour=d=>new Intl.DateTimeFormat('es-AR',{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:false}).format(d);
-const patterns={'arg.1':/argentin(a|e).*?(primera|profesional|liga)|liga profesional|primera divisi[oó]n.*argentin|argentina primera division/i,'arg.2':/primera nacional|argentina.*segunda/i,'conmebol.libertadores':/libertadores/i,'conmebol.sudamericana':/sudamericana/i,'esp.1':/la liga|laliga|spain.*primera|españa.*primera/i,'eng.1':/premier league|england.*premier/i,'ita.1':/serie a|italy.*serie a/i,'ger.1':/bundesliga|germany.*bundesliga/i,'uefa.champions':/champions league/i};
+// El proveedor devuelve una selección de encuentros de distintas ligas.
+// Las opciones se crean a partir de los campeonatos realmente recibidos.
+const compName=m=>String(get(m,'competition','competición','league','tournament')).trim();
+function rebuildLeagueOptions(){
+ const previous=league.value;
+ const counts=new Map();
+ for(const m of cached){const name=compName(m);if(name)counts.set(name,(counts.get(name)||0)+1)}
+ league.replaceChildren();
+ const all=document.createElement('option');all.value='all';all.textContent='Todos los campeonatos ('+cached.length+')';league.appendChild(all);
+ for(const [name,count] of [...counts].sort((a,b)=>a[0].localeCompare(b[0],'es'))){
+  const opt=document.createElement('option');opt.value=name;opt.textContent=name+' ('+count+')';league.appendChild(opt);
+ }
+ league.value=counts.has(previous)?previous:'all';
+}
+
 const get=(m,...keys)=>{for(const k of keys){if(m?.[k]!==undefined&&m[k]!==null)return m[k]}return ''};
 const safeImg=u=>/^https:\/\//i.test(String(u||''))?'<img loading="lazy" alt="" src="'+esc(u)+'">':'';
 const isMatch=m=>m&&typeof m==='object'&&(get(m,'home','local','home_team')||get(m,'away','visitante','away_team'));
 let busy=false,lastTime=0,lastSelection='',cached=[];
-function render(){const selected=league.value;const list=cached.filter(m=>selected==='all'||(patterns[selected]||/a^/).test(String(get(m,'competition','competición','league','tournament'))));
+function render(){const selected=league.value;const list=cached.filter(m=>selected==='all'||compName(m)===selected);
  const ordered=list.slice().sort((a,b)=>String(get(a,'time','hora','date')).localeCompare(String(get(b,'time','hora','date'))));let html='',lastDay='';
  for(const m of ordered){const dt=new Date(get(m,'time','hora','date'));const valid=!isNaN(dt.getTime());const day=valid?fmtDay(dt):'Partidos';if(day!==lastDay){html+='<h3 class="zf-day">'+esc(day)+'</h3>';lastDay=day}
  const home=get(m,'home','local','home_team'),away=get(m,'away','visitante','away_team');const comp=get(m,'competition','competición','league','tournament');const rawStatus=String(get(m,'status','estado')).toLowerCase(),live=/live|in.progress|playing|en vivo|1h|2h|half/i.test(rawStatus),final=/finished|final|terminad|full.time|ft/i.test(rawStatus);
  const hscore=get(m,'home_score','marcador local','homeScore'),ascore=get(m,'away_score','marcador visitante','awayScore');const hasScore=hscore!==''&&ascore!=='';const score=hasScore?esc(hscore)+' - '+esc(ascore):'vs';const label=live?'● EN VIVO':final?'Finalizado':valid?fmtHour(dt)+' hs':esc(get(m,'status_text','texto de estado','status'));
  html+='<article class="zf-game"><div class="zf-team">'+safeImg(get(m,'home_logo','logotipo local'))+'<span>'+esc(typeof home==='object'?get(home,'name','displayName'):home)+'</span></div><div class="zf-center"><div class="zf-score">'+score+'</div><div class="zf-time '+(live?'zf-playing':'')+'">'+esc(label)+'</div><small>'+esc(comp)+'</small></div><div class="zf-team"><span>'+esc(typeof away==='object'?get(away,'name','displayName'):away)+'</span>'+safeImg(get(m,'away_logo','logotipo visitante'))+'</div></article>';
  }
- games.innerHTML=html||'<p>No hay partidos de este campeonato entre los encuentros que devuelve la fuente gratuita. Probá «Todos los campeonatos».</p>';
+ games.innerHTML=html||'<p>No hay partidos de este campeonato en la consulta actual. Probá «Todos los campeonatos».</p>';
  status.textContent=list.length+' partidos · '+league.selectedOptions[0].text;mini.textContent=cached.length+' partidos disponibles en la consulta reciente. Entrá para ver los marcadores.';
  if(!document.getElementById('zf-credit')){const credit=document.createElement('p');credit.id='zf-credit';credit.style.cssText='text-align:center;font-size:12px;margin:12px 0';credit.innerHTML='<a href="https://sportscore.com/" rel="dofollow" target="_blank">Powered by SportScore</a>';games.insertAdjacentElement('afterend',credit)}
  }
 async function load(force=false){if(busy)return;if(!force&&cached.length&&Date.now()-lastTime<60000){render();return}busy=true;if(button)button.disabled=true;if(status)status.textContent='Consultando partidos…';
- try{if(!proxy||proxy.includes('TU-PROYECTO'))throw Error('Falta URL de Supabase');const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);let res;try{res=await fetch(proxy,{signal:c.signal,cache:'no-store'})}finally{clearTimeout(t)}if(!res.ok)throw Error('HTTP '+res.status);const data=await res.json();const list=Array.isArray(data)?data:Array.isArray(data.matches)?data.matches:Array.isArray(data.partidos)?data.partidos:[];if(!Array.isArray(list))throw Error('Respuesta inesperada');cached=list.filter(isMatch);lastTime=Date.now();render();if(updated)updated.textContent='Última consulta: '+fmtHour(new Date())+' (Argentina)';}
+ try{if(!proxy||proxy.includes('TU-PROYECTO'))throw Error('Falta URL de Supabase');const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);let res;try{res=await fetch(proxy,{signal:c.signal,cache:'no-store'})}finally{clearTimeout(t)}if(!res.ok)throw Error('HTTP '+res.status);const data=await res.json();const list=Array.isArray(data)?data:Array.isArray(data.matches)?data.matches:Array.isArray(data.partidos)?data.partidos:[];if(!Array.isArray(list))throw Error('Respuesta inesperada');cached=list.filter(isMatch);rebuildLeagueOptions();lastTime=Date.now();render();if(updated)updated.textContent='Última consulta: '+fmtHour(new Date())+' (Argentina)';}
  catch(e){games.innerHTML='<div class="zf-error">No se pudieron cargar los marcadores. <a href="https://sportscore.com/" target="_blank" rel="noopener noreferrer">Consultar SportScore ↗</a></div>';if(status)status.textContent='Datos no disponibles en este momento';if(updated)updated.textContent='Sin actualización';console.warn('ZETA24 fútbol:',e)}finally{busy=false;if(button)button.disabled=false}}
 league.addEventListener('change',()=>{if(cached.length)render();else load()});if(button)button.addEventListener('click',()=>load(true));if('IntersectionObserver'in window){const observer=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))load()},{rootMargin:'350px'});observer.observe(document.getElementById('futbol-en-vivo'))}else load();window.addEventListener('hashchange',()=>{if(location.hash==='#futbol-en-vivo')load()});if(location.hash==='#futbol-en-vivo')load();setInterval(()=>{if(!document.hidden&&location.hash==='#futbol-en-vivo')load(true)},60000);
 })();
