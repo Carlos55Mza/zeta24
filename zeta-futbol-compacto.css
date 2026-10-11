@@ -1,0 +1,14 @@
+/* ZETA24: marcadores compactos. Solo afecta a la sección de fútbol. */
+#futbol-en-vivo {padding:14px 16px!important;}
+#futbol-en-vivo .zf-header {margin-bottom:10px!important;gap:8px!important;}
+#futbol-en-vivo .zf-header h2 {font-size:clamp(1.2rem,2vw,1.55rem)!important;line-height:1.2!important;margin:3px 0!important;}
+#futbol-en-vivo .zf-header p,#futbol-en-vivo .zf-status {font-size:.78rem!important;margin:5px 0!important;}
+#futbol-en-vivo .zf-controls {gap:8px!important;margin:8px 0!important;}
+#futbol-en-vivo .zf-controls select,#futbol-en-vivo .zf-controls button {font-size:.8rem!important;padding:6px 9px!important;min-height:32px!important;}
+#futbol-en-vivo .zf-games {gap:7px!important;}
+#futbol-en-vivo .zf-games > * {margin-block:5px!important;}
+#futbol-en-vivo .zf-games :is(.zf-game,.zf-match,.zf-card,.zf-fixture,.match-card,.match-row,.game-card) {padding:7px 10px!important;min-height:0!important;gap:7px!important;border-radius:9px!important;}
+#futbol-en-vivo .zf-games :is(.zf-team,.zf-team-name,.team-name,.zf-score,.match-score) {font-size:.88rem!important;line-height:1.25!important;}
+#futbol-en-vivo .zf-games img {max-width:25px!important;max-height:25px!important;object-fit:contain!important;}
+#futbol-en-vivo .zf-footer {font-size:.72rem!important;margin-top:9px!important;}
+@media(max-width:600px){#futbol-en-vivo{padding:10px!important}#futbol-en-vivo .zf-games :is(.zf-game,.zf-match,.zf-card,.zf-fixture,.match-card,.match-row,.game-card){padding:6px!important}#futbol-en-vivo .zf-games img{max-width:20px!important;max-height:20px!important}}
