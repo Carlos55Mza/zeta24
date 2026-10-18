@@ -3,7 +3,7 @@ const sources=[{name:'Info del Este',url:'https://infodeleste.com/feed/'},{name:
 const areas=['San Martín','Junín','Rivadavia','Santa Rosa','La Paz'];
 function infer(s){const t=s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();for(const a of areas)if(t.includes(a.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()))return a;return null}
 function validUrl(s){try{let u=new URL(s);return u.protocol==='https:'?u.href:null}catch{return null}}
-function parseXml(xml,source){const doc=new DOMParser().parseFromString(xml,'text/xml');if(doc.querySelector('parsererror'))throw Error('RSS inválido');return [...doc.querySelectorAll('item')].slice(0,35).map(n=>{const get=t=>n.querySelector(t)?.textContent?.trim()||'';return {title:get('title'),link:validUrl(get('link')),date:Date.parse(get('pubDate'))||0,source,area:infer(get('title')+' '+get('category'))}}).filter(x=>x.title&&x.link)}
+function parseXml(xml,source){const doc=new DOMParser().parseFromString(xml,'text/xml');if(doc.querySelector('parsererror'))throw Error('RSS inválido');return [...doc.querySelectorAll('item')].slice(0,35).map(n=>{const get=t=>n.querySelector(t)?.textContent?.trim()||'';return {title:get('title'),link:validUrl(get('link')),date:Date.parse(get('pubDate'))||0,source,area:infer(get('title')+' '+get('category'))}}).filter(x=>x.title&&x.link&&x.area)}
 async function getFeed(src){const endpoints=[
 'https://api.allorigins.win/raw?url='+encodeURIComponent(src.url),
 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(src.url)
