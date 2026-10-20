@@ -1,0 +1,13 @@
+ZETA24 - MONITOR HIDROLÓGICO DEL LITORAL (20/10/2026)
+
+Se agregó un módulo independiente: index.html, zeta-hidrologia.js y zeta-hidrologia.css.
+
+FUENTE: Instituto Nacional del Agua (INA), capa WFS public2:ultimas_alturas_con_timeseries.
+
+FUNCIONAMIENTO: consulta al cargar, botón de actualización y cada 30 minutos mientras la página está abierta. Muestra altura (m), variación entre lecturas y fecha de observación. No confunde alturas con caudales; el caudal se indica como no disponible en esta serie.
+
+IMPORTANTE: No se pudo probar conectividad en vivo desde el entorno de creación. El servidor INA puede restringir CORS o responder con un formato diferente. Si aparece el mensaje de error, se requiere un proxy (por ejemplo una Supabase Edge Function) que consulte INA desde el servidor. No se incluyó una función Supabase sin comprobar la configuración del proyecto.
+
+La actualización ocurre mientras el sitio está abierto; no requiere modificar noticias. Para que la actualización funcione desde GitHub Pages es indispensable que el navegador pueda consultar el servicio oficial (CORS).
+
+NO SE MODIFICARON los demás módulos ni las credenciales existentes. Probar en el sitio publicado antes de reemplazar la versión anterior.
