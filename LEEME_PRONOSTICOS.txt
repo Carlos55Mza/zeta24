@@ -1,0 +1,11 @@
+ZETA24 — Pronósticos vigentes por país
+
+Al publicar desde Redacción una noticia en CLIMA, CLIMA PARAGUAY o CLIMA URUGUAY (o cuyo título contenga 'pronóstico'), el sistema busca el pronóstico más reciente del mismo país y lo actualiza en Supabase. Si todavía no existe, crea uno.
+
+En el Centro Meteorológico se muestra únicamente el pronóstico más reciente de cada país (Argentina, Paraguay y Uruguay). Los anteriores que ya existían permanecen en la base de datos, pero no se muestran en esos paneles. No se borran automáticamente.
+
+IMPORTANTE: para diferenciar países usá las secciones CLIMA (Argentina), CLIMA PARAGUAY y CLIMA URUGUAY, o indicá el país en el título. Una edición manual de noticias existentes sigue funcionando como antes.
+
+El reemplazo requiere conexión con Supabase y permisos de UPDATE sobre noticias. Probá con un pronóstico nuevo en la computadora antes de subir los archivos al sitio público.
+
+No se cambiaron las noticias comunes, radio, radar, ríos ni alertas.
