@@ -1,0 +1,14 @@
+ZETA24 — ALERTAS METEOROLÓGICAS (22/10/2026)
+
+El módulo aparece encima de los caudales y es desplegable. Sin configurar el servidor muestra enlaces oficiales y NO inventa avisos.
+
+PARA ACTIVAR LA CONSULTA AUTOMÁTICA:
+1. Crear una función Edge en el proyecto Supabase que ya usás, llamada zeta-alertas.
+2. Copiar el contenido de supabase/functions/zeta-alertas/index.ts en esa función y desplegarla con acceso público (sin verificación JWT).
+3. Copiar su URL pública, de la forma https://TU-PROYECTO.supabase.co/functions/v1/zeta-alertas
+4. Abrir zeta-alertas-config.js y pegar la URL entre las comillas de ZETA_ALERTAS_ENDPOINT.
+5. Subir los archivos modificados al repositorio GitHub Pages. No subir secretos ni claves.
+
+El navegador consulta la función cada 15 minutos mientras la página está abierta. La función lee fuentes CAP/RSS del SMN e Inumet. Paraguay conserva enlace a avisos oficiales hasta contar con integración verificada.
+
+IMPORTANTE: Es una primera implementación para probar. Hay que validar la estructura real de los CAP, las zonas y el filtrado de vigencias antes de anunciarlo como servicio de alertas plenamente operativo. Cuando una fuente falla, se muestra expresamente. No se declara 'sin alertas' como sinónimo de fallo.
