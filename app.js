@@ -13,8 +13,11 @@ function isForecast(post){
  return ['CLIMA','CLIMA PARAGUAY','CLIMA URUGUAY'].includes(section)||/\bPRONOSTICO\b/.test(title);
 }
 function forecastCountry(post){
- const text=normalizedNewsText(post.seccion)+' '+normalizedNewsText(post.titulo);
- return /\bURUGUAY\b/.test(text)?'URUGUAY':/\bPARAGUAY\b/.test(text)?'PARAGUAY':'ARGENTINA';
+ const section=normalizedNewsText(post.seccion), title=normalizedNewsText(post.titulo);
+ if(/\bURUGUAY\b/.test(section+' '+title))return 'URUGUAY';
+ if(/\bPARAGUAY\b/.test(section+' '+title))return 'PARAGUAY';
+ if(/\bMENDOZA\b/.test(title)||section==='CLIMA MENDOZA')return 'MENDOZA';
+ return 'ARGENTINA';
 }
 function latestForecasts(){
  const seen=new Set();

@@ -1,0 +1,1 @@
+Corrección: Mendoza y Argentina se muestran como informes independientes, junto con Paraguay y Uruguay. Se mantiene solamente el informe más reciente de cada región. No borra registros de Supabase. Para verificar, publicar o tener almacenado un pronóstico nacional identificado como Argentina.
