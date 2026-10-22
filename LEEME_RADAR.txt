@@ -1,0 +1,5 @@
+ZETA24 - Radar de tormentas
+
+Abrir index.html y buscar Centro Meteorologico > Radar de tormentas. El mapa Windy se carga al desplegarlo y requiere conexion a Internet. No depende de Supabase. El radar puede no cubrir todas las regiones y su disponibilidad depende de Windy. Si el proveedor bloquea el iframe, usar el enlace Abrir radar en Windy.
+
+No se alteraron las demas secciones ni las funciones de Supabase. No reemplazar una version publicada sin probarla.
