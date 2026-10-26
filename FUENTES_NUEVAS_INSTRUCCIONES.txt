@@ -1,0 +1,7 @@
+ZETA24 — fuentes adicionales
+
+La portada ahora limita a 2 titulares por medio en cada bloque automático.
+Las fuentes RSS efectivas se administran en la tabla fuentes_rss de Supabase y su recolector (no incluido en este ZIP).
+Agregar y verificar allí canales RSS oficiales de: Los Andes, MDZ, Diario UNO, El Sol, Perfil, Ámbito, Página/12, La Nación, Infobae, ABC Color, Última Hora, La Nación Paraguay, El Observador, Montevideo Portal, Subrayado, BBC Mundo, DW y France24.
+No cargar direcciones RSS supuestas: comprobar URL, permisos, sección y que el recolector las procese.
+La página Radio ZETA debe publicarse en repositorio independiente radio-zeta.
