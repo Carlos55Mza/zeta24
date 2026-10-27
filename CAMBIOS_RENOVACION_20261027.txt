@@ -1,0 +1,10 @@
+ZETA24 - Renovación 27/10/2026
+
+- Se retiraron las secciones independientes de Paraguay y Uruguay, incluidas sus previsiones en portada.
+- Se mantiene meteorología de Mendoza y Argentina, radar e hidrología.
+- Fútbol: acceso directo a Promiedos; se retiró el módulo de marcadores y sus scripts.
+- Se conservó el enlace a Radio ZETA y el resto del diseño.
+- Se agregaron enlaces de consulta a otros medios; NO son fuentes RSS activadas automáticamente.
+- Para ampliar la actualización automática, cargar y activar nuevas fuentes en la tabla fuentes_rss de Supabase y comprobar que el recolector las procese.
+- No se eliminaron noticias históricas de la base de datos.
+- Se conservaron archivos de fútbol por compatibilidad, aunque ya no se cargan.

@@ -22,13 +22,14 @@ function forecastCountry(post){
 function latestForecasts(){
  const seen=new Set();
  return cache.filter(p=>{
-  if(!isForecast(p)||p.demo)return false;
+  if(!isForecast(p)||p.demo||['PARAGUAY','URUGUAY'].includes(forecastCountry(p)))return false;
   const country=forecastCountry(p);
   if(seen.has(country))return false;
   seen.add(country);return true;
  });
 }
 function canLeadFrontPage(post,now=Date.now()){
+ if(['PARAGUAY','URUGUAY'].includes(normalizedNewsText(post.seccion)) || (isForecast(post)&&['PARAGUAY','URUGUAY'].includes(forecastCountry(post))))return false;
  if(!isForecast(post))return true;
  const published=Date.parse(post.created_at),age=now-published;
  return Number.isFinite(published)&&age>=0&&age<5*60*1000;
@@ -40,7 +41,7 @@ function scheduleForecastExpiry(){
  if(expiries.length)forecastExpiryTimer=setTimeout(()=>render(),Math.max(1,Math.min(...expiries)-now+25));
 }
 function secondaryNews(){const featured=featuredPost();return cache.filter(p=>!featured||String(p.id)!==String(featured.id))}
-function render(){const assigned=new Set(['ZONA ESTE','MENDOZA','ARGENTINA','INTERNACIONALES','ECONOMÍA','DEPORTES','ESPECTÁCULOS','TECNOLOGÍA Y CIENCIA','AMBIENTE','PARAGUAY','URUGUAY','CLIMA','CLIMA PARAGUAY','CLIMA URUGUAY']);const remaining=secondaryNews().filter(p=>!assigned.has(p.seccion)&&!isForecast(p));$('#newsGrid').innerHTML=remaining.map(card).join('');$('#newsGrid').closest('section').hidden=!remaining.length;$('#latestList').innerHTML='';$('#latestList').closest('section').hidden=true;const headline=cache.find(p=>canLeadFrontPage(p));$('#ticker').textContent=currentUrgentText||headline?.titulo||'Toda la actualidad en ZETA24';renderSections();filterNews();scheduleForecastExpiry()}
+function render(){const assigned=new Set(['ZONA ESTE','MENDOZA','ARGENTINA','INTERNACIONALES','ECONOMÍA','DEPORTES','ESPECTÁCULOS','TECNOLOGÍA Y CIENCIA','AMBIENTE','PARAGUAY','URUGUAY','CLIMA','CLIMA PARAGUAY','CLIMA URUGUAY']);const remaining=secondaryNews().filter(p=>!assigned.has(p.seccion)&&!isForecast(p)&&!['PARAGUAY','URUGUAY'].includes(normalizedNewsText(p.seccion)));$('#newsGrid').innerHTML=remaining.map(card).join('');$('#newsGrid').closest('section').hidden=!remaining.length;$('#latestList').innerHTML='';$('#latestList').closest('section').hidden=true;const headline=cache.find(p=>canLeadFrontPage(p));$('#ticker').textContent=currentUrgentText||headline?.titulo||'Toda la actualidad en ZETA24';renderSections();filterNews();scheduleForecastExpiry()}
 
 function openArticle(id){const p=cache.find(x=>String(x.id)===String(id));if(!p)return;$('#articleCat').textContent=p.seccion;$('#articleTitle').textContent=p.titulo;$('#articleMeta').textContent=`${fmt(p.created_at)} · ${p.autor||'Redacción ZETA 24'}`;const image=safeURL(p.imagen_url||'');$('#articleBody').innerHTML=(image?`<figure class="article-photo"><img src="${esc(image)}" alt="${esc(p.titulo)}">${p.imagen_credito?`<figcaption>${esc(p.imagen_credito)}</figcaption>`:''}</figure>`:'')+String(p.contenido).split(/\n+/).map(x=>`<p>${esc(x)}</p>`).join('');$('#articleModal').classList.add('open');history.replaceState(null,'','#nota='+id)}
 $('#closeArticle').onclick=()=>{$('#articleModal').classList.remove('open');history.replaceState(null,'',location.pathname)};
@@ -142,7 +143,7 @@ function keepCurrencyNews(post){
  if(location)return /^ARGENTINA\b/.test(location[1].trim());
  return true;
 }
-async function loadExternal(){try{const [news,status]=await Promise.all([sb.from('noticias_externas').select('*').gte('published_at',new Date(Date.now()-7*86400000).toISOString()).order('published_at',{ascending:false}).limit(800),sb.from('fuentes_rss').select('nombre,ultima_ok,ultimo_error').eq('activa',true)]);if(news.error||status.error)throw news.error||status.error;externalNews=(news.data||[]).filter(keepNetflixNews).filter(keepCurrencyNews);const times=(status.data||[]).map(x=>x.ultima_ok).filter(Boolean).sort();const latest=times.at(-1);const failed=(status.data||[]).filter(x=>x.ultimo_error).length;$('#autoStatus').textContent=latest?`Última lectura de fuentes: ${fmt(latest)}. ${failed?failed+' fuentes no respondieron; se conservan sus titulares anteriores.':'Actualización programada cada 15 minutos.'}`:'Noticias automáticas pendientes de la primera actualización.';$('#autoBadge').textContent=latest?(Date.now()-new Date(latest)>45*60000?'DEMORADA':'ACTUALIZADAS'):'PENDIENTE';if(latest&&Date.now()-new Date(latest)>45*60000)$('#autoStatus').textContent+=' La actualización está demorada.'}catch{ $('#autoStatus').textContent='Noticias automáticas pendientes de activación o temporalmente sin conexión.';$('#autoBadge').textContent='PENDIENTE'}renderSections()}
+async function loadExternal(){try{const [news,status]=await Promise.all([sb.from('noticias_externas').select('*').gte('published_at',new Date(Date.now()-7*86400000).toISOString()).order('published_at',{ascending:false}).limit(800),sb.from('fuentes_rss').select('nombre,ultima_ok,ultimo_error').eq('activa',true)]);if(news.error||status.error)throw news.error||status.error;externalNews=(news.data||[]).filter(keepNetflixNews).filter(keepCurrencyNews).filter(p=>!['PARAGUAY','URUGUAY'].includes(normalizedNewsText(p.seccion)));const times=(status.data||[]).map(x=>x.ultima_ok).filter(Boolean).sort();const latest=times.at(-1);const failed=(status.data||[]).filter(x=>x.ultimo_error).length;$('#autoStatus').textContent=latest?`Última lectura de fuentes: ${fmt(latest)}. ${failed?failed+' fuentes no respondieron; se conservan sus titulares anteriores.':'Actualización programada cada 15 minutos.'}`:'Noticias automáticas pendientes de la primera actualización.';$('#autoBadge').textContent=latest?(Date.now()-new Date(latest)>45*60000?'DEMORADA':'ACTUALIZADAS'):'PENDIENTE';if(latest&&Date.now()-new Date(latest)>45*60000)$('#autoStatus').textContent+=' La actualización está demorada.'}catch{ $('#autoStatus').textContent='Noticias automáticas pendientes de activación o temporalmente sin conexión.';$('#autoBadge').textContent='PENDIENTE'}renderSections()}
 setInterval(()=>{if(!document.hidden)loadExternal();},60*1000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();loadExternal();}});
 
@@ -150,7 +151,7 @@ function renderFeatured(){const p=featuredPost();const el=$('#featuredNews');el.
 
 function renderWeatherReports(){const rows=latestForecasts();$('#weatherReports').innerHTML=rows.length?rows.map(card).join(''):'<p>Todavía no hay informes publicados. Volvé pronto para leer el análisis de Estación Zúñiga.</p>';}
 
-function renderRegional(){for(const [key,id] of [['PARAGUAY','paraguay'],['URUGUAY','uruguay']]){const own=secondaryNews().filter(p=>p.seccion===key&&!p.demo&&!isForecast(p));const ext=varied(externalNews.filter(p=>p.seccion===key));$('#'+id+'News').innerHTML=own.map(card).join('')+ext.map(externalCard).join('');$('#'+id+'NewsStatus').textContent=ext.length?'Titulares de medios del país · Consultá la fecha y la fuente de cada nota.':own.length?'Noticias de nuestra redacción.':'Los titulares automáticos todavía no están disponibles. Podés consultar el medio de origen desde el enlace inferior.';const reports=latestForecasts().filter(p=>forecastCountry(p)===key);$('#'+id+'Reports').innerHTML=reports.length?reports.map(card).join(''):'<p>Pronto publicaremos informes y pronósticos de Estación Zúñiga para este país.</p>';}}
+function renderRegional(){return;for(const [key,id] of [['PARAGUAY','paraguay'],['URUGUAY','uruguay']]){const own=secondaryNews().filter(p=>p.seccion===key&&!p.demo&&!isForecast(p));const ext=varied(externalNews.filter(p=>p.seccion===key));$('#'+id+'News').innerHTML=own.map(card).join('')+ext.map(externalCard).join('');$('#'+id+'NewsStatus').textContent=ext.length?'Titulares de medios del país · Consultá la fecha y la fuente de cada nota.':own.length?'Noticias de nuestra redacción.':'Los titulares automáticos todavía no están disponibles. Podés consultar el medio de origen desde el enlace inferior.';const reports=latestForecasts().filter(p=>forecastCountry(p)===key);$('#'+id+'Reports').innerHTML=reports.length?reports.map(card).join(''):'<p>Pronto publicaremos informes y pronósticos de Estación Zúñiga para este país.</p>';}}
 
 function bindNewsImages(){$$('main .card-media img').forEach(img=>{img.onerror=()=>{const figure=img.closest('figure');img.closest('.card')?.classList.remove('has-photo');figure?.remove();composeEdition();};});}
 
