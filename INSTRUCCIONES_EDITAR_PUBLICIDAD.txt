@@ -1,0 +1,12 @@
+ZETA24 - MODIFICAR PUBLICIDAD
+
+1. Subir los archivos del ZIP a la raiz del repositorio GitHub, reemplazando los anteriores.
+2. Recargar la pagina con Ctrl+F5.
+3. Entrar a Redaccion e iniciar sesion.
+4. En Administrar publicidad, pulsar VER PUBLICIDADES / MODIFICAR.
+5. Buscar el aviso y pulsar EDITAR / CAMBIAR FOTO.
+6. Seleccionar la nueva imagen (JPG, PNG o WebP, maximo 5 MB).
+7. Pulsar GUARDAR CAMBIOS.
+
+No requiere cambiar Supabase ni ejecutar SQL.
+El sistema ya incluia edicion; esta actualizacion hace visible el procedimiento.
