@@ -62,6 +62,27 @@ function resetNewsEditor(){
  $('#editNewsSelect').value='';
 }
 $('#newNewsBtn').onclick=resetNewsEditor;
+$('#deleteNewsBtn').onclick=async()=>{
+ const id=$('#editNewsSelect').value;
+ if(!id)return toast('Elegí primero la noticia que querés eliminar');
+ const selected=cache.find(p=>String(p.id)===String(id));
+ if(!selected)return toast('No se encontró esa noticia. Actualizá el diario.');
+ if(!confirm('¿Eliminar definitivamente esta noticia de ZETA24?\n\n'+selected.titulo+'\n\nEsta acción no se puede deshacer.'))return;
+ const button=$('#deleteNewsBtn');button.disabled=true;
+ try{
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)throw new Error('Iniciá sesión en Redacción');
+  const {data,error}=await sb.from('noticias').delete().eq('id',id).select('id');
+  if(error)throw error;
+  if(!data?.length)throw new Error('Supabase no autorizó el borrado. Revisá las políticas de DELETE (RLS) de la tabla noticias para el usuario administrador.');
+  if(location.hash==='#nota='+id){$('#articleModal').classList.remove('open');history.replaceState(null,'',location.pathname+location.search)}
+  resetNewsEditor();await load();refreshEditNewsList();
+  $('#editNewsStatus').textContent='Noticia eliminada correctamente.';
+  toast('Noticia eliminada de ZETA24');
+ }catch(error){toast('No se pudo eliminar: '+error.message);$('#editNewsStatus').textContent='Error al eliminar: '+error.message}
+ finally{button.disabled=false}
+};
+
 $('#editNewsBtn').onclick=async()=>{
  const id=$('#editNewsSelect').value;if(!id)return toast('Elegí primero la noticia que querés editar');
  const button=$('#editNewsBtn');button.disabled=true;

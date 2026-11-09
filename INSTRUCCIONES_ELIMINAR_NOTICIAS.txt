@@ -1,0 +1,8 @@
+ZETA24 - Gestión de noticias de Redacción (09/11/2026)
+
+1. Subí todos los archivos del ZIP al repositorio del diario, reemplazando los anteriores.
+2. Abrí el diario, entrá en REDACCIÓN e iniciá sesión.
+3. En Editar una noticia publicada, elegí la del 14 de octubre.
+4. Pulsá ELIMINAR NOTICIA y confirmá.
+5. Si Supabase rechaza la operación, hay que configurar una política RLS DELETE segura para el administrador de la tabla noticias. No desactives RLS ni habilites DELETE para todos los usuarios autenticados.
+6. El botón elimina la fila de noticias, no necesariamente los archivos de fotos subidos a Storage.
